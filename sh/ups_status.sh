@@ -1,8 +1,23 @@
-#!/bin/sh
+#!/bin/bash
  
 ups=$1
+
+if [ $ups = ups.discovery ]; then
+
+    echo -e "{\n\t\"data\":["
+    first=1
+    /bin/upsc -l | while read discovered ; do 
+        if [ $first -eq 0 ]; then
+            echo -e ","
+        fi
+        echo -en "\t\t{ \"{#UPSNAME}\":\t\"${discovered}\" }"
+        first=0
+    done
+    echo -e "\n\t]\n}"
+
+else
 key=$2
- 
+
 if [ $key = ups.status ]; then
 	state=`/bin/upsc $ups $key`
 	case $state in
@@ -23,3 +38,6 @@ if [ $key = ups.status ]; then
 else
 	/bin/upsc $ups $key
 fi
+
+fi
+
