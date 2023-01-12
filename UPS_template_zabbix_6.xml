@@ -371,6 +371,10 @@
                             <value>12</value>
                             <newvalue>UPS is boosting incoming voltage</newvalue>
                         </mapping>
+                        <mapping>
+                            <value>13</value>
+                            <newvalue>On line (mains is present) and Battery is charging</newvalue>
+                        </mapping>
                     </mappings>
                 </valuemap>
             </valuemaps>
