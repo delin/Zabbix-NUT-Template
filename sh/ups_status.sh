@@ -34,6 +34,7 @@ if [[ $key = ups.status ]]; then
 		"TRIM")		echo 11 ;; #'UPS is trimming incoming voltage (called "buck" in some hardware)' ;;
 		"BOOST")	echo 12 ;; #'UPS is boosting incoming voltage' ;;
 		"OL CHRG")	echo 13 ;; #'On battery (mains is not present) and the battery is charging' ;;
+  		"OB DISCHRG")   echo 14 ;; #'On battery discharging (mains absent)
 		* )		echo 0 ;; #'unknown state' ;;
 	esac
 else
