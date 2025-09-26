@@ -2,7 +2,7 @@
 
 ups=$1
 
-if [ $ups = ups.discovery ]; then
+if [[ $ups = ups.discovery ]]; then
 
     echo -e "{\n\t\"data\":["
     first=1
