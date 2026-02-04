@@ -29,6 +29,7 @@
                             <name>UPS {#UPSNAME} Charge</name>
                             <key>upsmon[{#UPSNAME},battery.charge]</key>
                             <delay>10</delay>
+                            <value_type>TEXT</value_type>
                             <units>%</units>
                             <tags>
                                 <tag>
@@ -39,13 +40,13 @@
                             <trigger_prototypes>
                                 <trigger_prototype>
                                     <uuid>7cf0bc49cac7455a9ed7849ac55d8556</uuid>
-                                    <expression>last(/nut_ups template/upsmon[{#UPSNAME},battery.charge])&lt;40</expression>
+                                    <expression>last(/nut_ups template/upsmon.numeric[{#UPSNAME},battery.charge])&lt;40</expression>
                                     <name>UPS {#UPSNAME} Charge &lt; 40%</name>
                                     <priority>DISASTER</priority>
                                 </trigger_prototype>
                                 <trigger_prototype>
                                     <uuid>914901e5f66244d2b4d0313b02f31925</uuid>
-                                    <expression>last(/nut_ups template/upsmon[{#UPSNAME},battery.charge])&lt;90</expression>
+                                    <expression>last(/nut_ups template/upsmon.numeric[{#UPSNAME},battery.charge])&lt;90</expression>
                                     <name>UPS {#UPSNAME} Charge &lt; 90%</name>
                                     <priority>HIGH</priority>
                                 </trigger_prototype>
@@ -56,7 +57,7 @@
                             <name>UPS {#UPSNAME} Batt Temperature</name>
                             <key>upsmon[{#UPSNAME},battery.temperature]</key>
                             <delay>10</delay>
-                            <value_type>FLOAT</value_type>
+                            <value_type>TEXT</value_type>
                             <units>C</units>
                             <tags>
                                 <tag>
@@ -70,7 +71,7 @@
                             <name>UPS {#UPSNAME} Battery Voltage</name>
                             <key>upsmon[{#UPSNAME},battery.voltage]</key>
                             <delay>10</delay>
-                            <value_type>FLOAT</value_type>
+                            <value_type>TEXT</value_type>
                             <units>Volts</units>
                             <tags>
                                 <tag>
@@ -84,7 +85,7 @@
                             <name>UPS {#UPSNAME} Input Voltage</name>
                             <key>upsmon[{#UPSNAME},input.voltage]</key>
                             <delay>30</delay>
-                            <value_type>FLOAT</value_type>
+                            <value_type>TEXT</value_type>
                             <units>Volts</units>
                             <tags>
                                 <tag>
@@ -98,6 +99,7 @@
                             <name>UPS {#UPSNAME} Output Frequency</name>
                             <key>upsmon[{#UPSNAME},output.frequency]</key>
                             <delay>30</delay>
+                            <value_type>TEXT</value_type>
                             <units>Hz</units>
                             <tags>
                                 <tag>
@@ -111,7 +113,7 @@
                             <name>UPS {#UPSNAME} Output Voltage</name>
                             <key>upsmon[{#UPSNAME},output.voltage]</key>
                             <delay>30</delay>
-                            <value_type>FLOAT</value_type>
+                            <value_type>TEXT</value_type>
                             <units>Volts</units>
                             <tags>
                                 <tag>
@@ -125,7 +127,7 @@
                             <name>UPS {#UPSNAME} Load</name>
                             <key>upsmon[{#UPSNAME},ups.load]</key>
                             <delay>10</delay>
-                            <value_type>FLOAT</value_type>
+                            <value_type>TEXT</value_type>
                             <units>%</units>
                             <tags>
                                 <tag>
@@ -134,11 +136,224 @@
                                 </tag>
                             </tags>
                         </item_prototype>
+                        <!-- Dependent Items for numeric values (graphs/triggers) -->
+                        <item_prototype>
+                            <uuid>d1a1f414c2434104a98376d2edbbd001</uuid>
+                            <name>UPS {#UPSNAME} Charge (Numeric)</name>
+                            <type>DEPENDENT</type>
+                            <key>upsmon.numeric[{#UPSNAME},battery.charge]</key>
+                            <value_type>FLOAT</value_type>
+                            <units>%</units>
+                            <preprocessing>
+                                <step>
+                                    <type>MATCHES_REGEX</type>
+                                    <parameters>
+                                        <parameter>^-?[0-9]+\.?[0-9]*$</parameter>
+                                    </parameters>
+                                    <error_handler>DISCARD_VALUE</error_handler>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>upsmon[{#UPSNAME},battery.charge]</key>
+                            </master_item>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>UPS</value>
+                                </tag>
+                            </tags>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>d1a1f414c2434104a98376d2edbbd002</uuid>
+                            <name>UPS {#UPSNAME} Batt Temperature (Numeric)</name>
+                            <type>DEPENDENT</type>
+                            <key>upsmon.numeric[{#UPSNAME},battery.temperature]</key>
+                            <value_type>FLOAT</value_type>
+                            <units>C</units>
+                            <preprocessing>
+                                <step>
+                                    <type>MATCHES_REGEX</type>
+                                    <parameters>
+                                        <parameter>^-?[0-9]+\.?[0-9]*$</parameter>
+                                    </parameters>
+                                    <error_handler>DISCARD_VALUE</error_handler>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>upsmon[{#UPSNAME},battery.temperature]</key>
+                            </master_item>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>UPS</value>
+                                </tag>
+                            </tags>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>d1a1f414c2434104a98376d2edbbd003</uuid>
+                            <name>UPS {#UPSNAME} Battery Voltage (Numeric)</name>
+                            <type>DEPENDENT</type>
+                            <key>upsmon.numeric[{#UPSNAME},battery.voltage]</key>
+                            <value_type>FLOAT</value_type>
+                            <units>Volts</units>
+                            <preprocessing>
+                                <step>
+                                    <type>MATCHES_REGEX</type>
+                                    <parameters>
+                                        <parameter>^-?[0-9]+\.?[0-9]*$</parameter>
+                                    </parameters>
+                                    <error_handler>DISCARD_VALUE</error_handler>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>upsmon[{#UPSNAME},battery.voltage]</key>
+                            </master_item>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>UPS</value>
+                                </tag>
+                            </tags>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>d1a1f414c2434104a98376d2edbbd004</uuid>
+                            <name>UPS {#UPSNAME} Input Voltage (Numeric)</name>
+                            <type>DEPENDENT</type>
+                            <key>upsmon.numeric[{#UPSNAME},input.voltage]</key>
+                            <value_type>FLOAT</value_type>
+                            <units>Volts</units>
+                            <preprocessing>
+                                <step>
+                                    <type>MATCHES_REGEX</type>
+                                    <parameters>
+                                        <parameter>^-?[0-9]+\.?[0-9]*$</parameter>
+                                    </parameters>
+                                    <error_handler>DISCARD_VALUE</error_handler>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>upsmon[{#UPSNAME},input.voltage]</key>
+                            </master_item>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>UPS</value>
+                                </tag>
+                            </tags>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>d1a1f414c2434104a98376d2edbbd005</uuid>
+                            <name>UPS {#UPSNAME} Output Frequency (Numeric)</name>
+                            <type>DEPENDENT</type>
+                            <key>upsmon.numeric[{#UPSNAME},output.frequency]</key>
+                            <value_type>FLOAT</value_type>
+                            <units>Hz</units>
+                            <preprocessing>
+                                <step>
+                                    <type>MATCHES_REGEX</type>
+                                    <parameters>
+                                        <parameter>^-?[0-9]+\.?[0-9]*$</parameter>
+                                    </parameters>
+                                    <error_handler>DISCARD_VALUE</error_handler>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>upsmon[{#UPSNAME},output.frequency]</key>
+                            </master_item>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>UPS</value>
+                                </tag>
+                            </tags>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>d1a1f414c2434104a98376d2edbbd006</uuid>
+                            <name>UPS {#UPSNAME} Output Voltage (Numeric)</name>
+                            <type>DEPENDENT</type>
+                            <key>upsmon.numeric[{#UPSNAME},output.voltage]</key>
+                            <value_type>FLOAT</value_type>
+                            <units>Volts</units>
+                            <preprocessing>
+                                <step>
+                                    <type>MATCHES_REGEX</type>
+                                    <parameters>
+                                        <parameter>^-?[0-9]+\.?[0-9]*$</parameter>
+                                    </parameters>
+                                    <error_handler>DISCARD_VALUE</error_handler>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>upsmon[{#UPSNAME},output.voltage]</key>
+                            </master_item>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>UPS</value>
+                                </tag>
+                            </tags>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>d1a1f414c2434104a98376d2edbbd007</uuid>
+                            <name>UPS {#UPSNAME} Load (Numeric)</name>
+                            <type>DEPENDENT</type>
+                            <key>upsmon.numeric[{#UPSNAME},ups.load]</key>
+                            <value_type>FLOAT</value_type>
+                            <units>%</units>
+                            <preprocessing>
+                                <step>
+                                    <type>MATCHES_REGEX</type>
+                                    <parameters>
+                                        <parameter>^-?[0-9]+\.?[0-9]*$</parameter>
+                                    </parameters>
+                                    <error_handler>DISCARD_VALUE</error_handler>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>upsmon[{#UPSNAME},ups.load]</key>
+                            </master_item>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>UPS</value>
+                                </tag>
+                            </tags>
+                        </item_prototype>
+                        <item_prototype>
+                            <uuid>d1a1f414c2434104a98376d2edbbd008</uuid>
+                            <name>UPS {#UPSNAME} Status (Numeric)</name>
+                            <type>DEPENDENT</type>
+                            <key>upsmon.numeric[{#UPSNAME},ups.status]</key>
+                            <value_type>UNSIGNED</value_type>
+                            <valuemap>
+                                <name>UPS Battery Status</name>
+                            </valuemap>
+                            <preprocessing>
+                                <step>
+                                    <type>MATCHES_REGEX</type>
+                                    <parameters>
+                                        <parameter>^[0-9]+$</parameter>
+                                    </parameters>
+                                    <error_handler>DISCARD_VALUE</error_handler>
+                                </step>
+                            </preprocessing>
+                            <master_item>
+                                <key>upsmon[{#UPSNAME},ups.status]</key>
+                            </master_item>
+                            <tags>
+                                <tag>
+                                    <tag>Application</tag>
+                                    <value>UPS</value>
+                                </tag>
+                            </tags>
+                        </item_prototype>
+                        <!-- End Dependent Items -->
                         <item_prototype>
                             <uuid>5d4e30f7c56948eb8338986633444da9</uuid>
                             <name>UPS {#UPSNAME} Status</name>
                             <key>upsmon[{#UPSNAME},ups.status]</key>
                             <delay>10</delay>
+                            <value_type>TEXT</value_type>
                             <valuemap>
                                 <name>UPS Battery Status</name>
                             </valuemap>
@@ -151,84 +366,84 @@
                             <trigger_prototypes>
                                 <trigger_prototype>
                                     <uuid>9f4abaee0479435bbb798b0ee9c90913</uuid>
-                                    <expression>last(/nut_ups template/upsmon[{#UPSNAME},ups.status])=5</expression>
+                                    <expression>last(/nut_ups template/upsmon.numeric[{#UPSNAME},ups.status])=5</expression>
                                     <name>UPS {#UPSNAME} Status - Battery is charging</name>
                                     <priority>INFO</priority>
                                     <description>The battery is charging</description>
                                 </trigger_prototype>
                                 <trigger_prototype>
                                     <uuid>c7aae07f67cc4bebb2856096814fc3ff</uuid>
-                                    <expression>last(/nut_ups template/upsmon[{#UPSNAME},ups.status])=12</expression>
+                                    <expression>last(/nut_ups template/upsmon.numeric[{#UPSNAME},ups.status])=12</expression>
                                     <name>UPS {#UPSNAME} Status - Boosting incoming voltage</name>
                                     <priority>INFO</priority>
                                     <description>UPS is boosting incoming voltage</description>
                                 </trigger_prototype>
                                 <trigger_prototype>
                                     <uuid>57b77962eaaf40e2865c561ce487fcce</uuid>
-                                    <expression>last(/nut_ups template/upsmon[{#UPSNAME},ups.status])=7</expression>
+                                    <expression>last(/nut_ups template/upsmon.numeric[{#UPSNAME},ups.status])=7</expression>
                                     <name>UPS {#UPSNAME} Status - Bypass</name>
                                     <priority>DISASTER</priority>
                                     <description>UPS bypass circuit is active echo no battery protection is available</description>
                                 </trigger_prototype>
                                 <trigger_prototype>
                                     <uuid>8e9f5e101b9e456c86889fb52ec8ea9e</uuid>
-                                    <expression>last(/nut_ups template/upsmon[{#UPSNAME},ups.status])=8</expression>
+                                    <expression>last(/nut_ups template/upsmon.numeric[{#UPSNAME},ups.status])=8</expression>
                                     <name>UPS {#UPSNAME} Status - Calibration</name>
                                     <priority>INFO</priority>
                                     <description>UPS is currently performing runtime calibration (on battery)</description>
                                 </trigger_prototype>
                                 <trigger_prototype>
                                     <uuid>c75cd90be32644f188e8702cc3f66539</uuid>
-                                    <expression>last(/nut_ups template/upsmon[{#UPSNAME},ups.status])=3</expression>
+                                    <expression>last(/nut_ups template/upsmon.numeric[{#UPSNAME},ups.status])=3</expression>
                                     <name>UPS {#UPSNAME} Status - Low battery</name>
                                     <priority>DISASTER</priority>
                                     <description>Low battery</description>
                                 </trigger_prototype>
                                 <trigger_prototype>
                                     <uuid>44629a8b50ae495b8a4f1e247a188b9c</uuid>
-                                    <expression>last(/nut_ups template/upsmon[{#UPSNAME},ups.status])=9</expression>
+                                    <expression>last(/nut_ups template/upsmon.numeric[{#UPSNAME},ups.status])=9</expression>
                                     <name>UPS {#UPSNAME} Status - Offline</name>
                                     <priority>DISASTER</priority>
                                     <description>UPS is offline and is not supplying power to the load</description>
                                 </trigger_prototype>
                                 <trigger_prototype>
                                     <uuid>5e5c975d420e46b697d763dc2555ece5</uuid>
-                                    <expression>last(/nut_ups template/upsmon[{#UPSNAME},ups.status])=2</expression>
+                                    <expression>last(/nut_ups template/upsmon.numeric[{#UPSNAME},ups.status])=2</expression>
                                     <name>UPS {#UPSNAME} Status - On battery</name>
                                     <priority>HIGH</priority>
                                     <description>On battery (mains is not present)</description>
                                 </trigger_prototype>
                                 <trigger_prototype>
                                     <uuid>14a772103af045ff80caafc8e0d3fcdb</uuid>
-                                    <expression>last(/nut_ups template/upsmon[{#UPSNAME},ups.status])=14</expression>
+                                    <expression>last(/nut_ups template/upsmon.numeric[{#UPSNAME},ups.status])=14</expression>
                                     <name>UPS {#UPSNAME} Status - On Battery ( discharging) mains not present</name>
                                     <priority>HIGH</priority>
                                     <description>UPS is currently On Battery ( discharging) mains not present</description>
                                 </trigger_prototype>
                                 <trigger_prototype>
                                     <uuid>244f2fb2f9ee4674a7ca1ef19815d74b</uuid>
-                                    <expression>last(/nut_ups template/upsmon[{#UPSNAME},ups.status])=13</expression>
+                                    <expression>last(/nut_ups template/upsmon.numeric[{#UPSNAME},ups.status])=13</expression>
                                     <name>UPS {#UPSNAME} Status - OnLine, battery is charging</name>
                                     <priority>INFO</priority>
                                     <description>UPS is currently On-Line</description>
                                 </trigger_prototype>
                                 <trigger_prototype>
                                     <uuid>bc6707e00297449b824bf57bbfc85b02</uuid>
-                                    <expression>last(/nut_ups template/upsmon[{#UPSNAME},ups.status])=10</expression>
+                                    <expression>last(/nut_ups template/upsmon.numeric[{#UPSNAME},ups.status])=10</expression>
                                     <name>UPS {#UPSNAME} Status - Overloaded</name>
                                     <priority>DISASTER</priority>
                                     <description>UPS is overloaded</description>
                                 </trigger_prototype>
                                 <trigger_prototype>
                                     <uuid>7feffcefb78e4bd48ec2ba28db0a35ae</uuid>
-                                    <expression>last(/nut_ups template/upsmon[{#UPSNAME},ups.status])=11</expression>
+                                    <expression>last(/nut_ups template/upsmon.numeric[{#UPSNAME},ups.status])=11</expression>
                                     <name>UPS {#UPSNAME} Status - Trimming incoming voltage</name>
                                     <priority>HIGH</priority>
                                     <description>UPS is trimming incoming voltage (called &quot;buck&quot; in some hardware)</description>
                                 </trigger_prototype>
                                 <trigger_prototype>
                                     <uuid>f364980a59fa42d794ab5748959069e8</uuid>
-                                    <expression>last(/nut_ups template/upsmon[{#UPSNAME},ups.status])=0</expression>
+                                    <expression>last(/nut_ups template/upsmon.numeric[{#UPSNAME},ups.status])=0</expression>
                                     <name>UPS {#UPSNAME} Status - Unknown state</name>
                                     <priority>DISASTER</priority>
                                     <description>Unknown state</description>
@@ -247,7 +462,7 @@
                                     <color>C80000</color>
                                     <item>
                                         <host>nut_ups template</host>
-                                        <key>upsmon[{#UPSNAME},battery.temperature]</key>
+                                        <key>upsmon.numeric[{#UPSNAME},battery.temperature]</key>
                                     </item>
                                 </graph_item>
                                 <graph_item>
@@ -256,7 +471,7 @@
                                     <calc_fnc>ALL</calc_fnc>
                                     <item>
                                         <host>nut_ups template</host>
-                                        <key>upsmon[{#UPSNAME},battery.voltage]</key>
+                                        <key>upsmon.numeric[{#UPSNAME},battery.voltage]</key>
                                     </item>
                                 </graph_item>
                             </graph_items>
@@ -271,7 +486,7 @@
                                     <color>C80000</color>
                                     <item>
                                         <host>nut_ups template</host>
-                                        <key>upsmon[{#UPSNAME},battery.charge]</key>
+                                        <key>upsmon.numeric[{#UPSNAME},battery.charge]</key>
                                     </item>
                                 </graph_item>
                             </graph_items>
@@ -284,7 +499,7 @@
                                     <color>C80000</color>
                                     <item>
                                         <host>nut_ups template</host>
-                                        <key>upsmon[{#UPSNAME},output.frequency]</key>
+                                        <key>upsmon.numeric[{#UPSNAME},output.frequency]</key>
                                     </item>
                                 </graph_item>
                             </graph_items>
@@ -299,7 +514,7 @@
                                     <color>C80000</color>
                                     <item>
                                         <host>nut_ups template</host>
-                                        <key>upsmon[{#UPSNAME},ups.load]</key>
+                                        <key>upsmon.numeric[{#UPSNAME},ups.load]</key>
                                     </item>
                                 </graph_item>
                             </graph_items>
@@ -316,7 +531,7 @@
                                     <calc_fnc>ALL</calc_fnc>
                                     <item>
                                         <host>nut_ups template</host>
-                                        <key>upsmon[{#UPSNAME},ups.status]</key>
+                                        <key>upsmon.numeric[{#UPSNAME},ups.status]</key>
                                     </item>
                                 </graph_item>
                             </graph_items>
@@ -329,7 +544,7 @@
                                     <color>C80000</color>
                                     <item>
                                         <host>nut_ups template</host>
-                                        <key>upsmon[{#UPSNAME},input.voltage]</key>
+                                        <key>upsmon.numeric[{#UPSNAME},input.voltage]</key>
                                     </item>
                                 </graph_item>
                                 <graph_item>
@@ -337,7 +552,7 @@
                                     <color>00C800</color>
                                     <item>
                                         <host>nut_ups template</host>
-                                        <key>upsmon[{#UPSNAME},output.voltage]</key>
+                                        <key>upsmon.numeric[{#UPSNAME},output.voltage]</key>
                                     </item>
                                 </graph_item>
                             </graph_items>
