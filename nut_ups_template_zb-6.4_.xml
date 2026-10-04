@@ -98,6 +98,7 @@
                             <name>UPS {#UPSNAME} Output Frequency</name>
                             <key>upsmon[{#UPSNAME},output.frequency]</key>
                             <delay>30</delay>
+                            <value_type>FLOAT</value_type>
                             <units>Hz</units>
                             <tags>
                                 <tag>
@@ -149,6 +150,18 @@
                                 </tag>
                             </tags>
                             <trigger_prototypes>
+                                <trigger_prototype>
+                                    <uuid>615f0b3bc8264812b99f8a43203f0316</uuid>
+                                    <expression>last(/nut_ups template/upsmon[{#UPSNAME},ups.status])=4</expression>
+                                    <name>UPS {#UPSNAME} Status - Battery needs replacement</name>
+                                    <priority>HIGH</priority>
+                                </trigger_prototype>
+                                <trigger_prototype>
+                                    <uuid>db3903ecff964b8d8aebdcf05a5eeb9a</uuid>
+                                    <expression>nodata(/nut_ups template/upsmon[{#UPSNAME},ups.status],5m)=1</expression>
+                                    <name>UPS {#UPSNAME} Status - No data for 5 minutes</name>
+                                    <priority>HIGH</priority>
+                                </trigger_prototype>
                                 <trigger_prototype>
                                     <uuid>9f4abaee0479435bbb798b0ee9c90913</uuid>
                                     <expression>last(/nut_ups template/upsmon[{#UPSNAME},ups.status])=5</expression>
@@ -405,6 +418,10 @@
                         <mapping>
                             <value>13</value>
                             <newvalue>On line (mains is present) and Battery is charging</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>14</value>
+                            <newvalue>On battery (mains is not present) and battery is discharging</newvalue>
                         </mapping>
                     </mappings>
                 </valuemap>

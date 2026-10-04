@@ -411,6 +411,15 @@
                             <type>0</type>
                         </trigger_prototype>
                         <trigger_prototype>
+                            <expression>{UPS:upsmon[{#UPSNAME},ups.status].last(0)}=4</expression>
+                            <name>UPS {#UPSNAME} Status - Battery needs replacement</name>
+                            <url/>
+                            <status>0</status>
+                            <priority>4</priority>
+                            <description>The battery needs to be replaced</description>
+                            <type>0</type>
+                        </trigger_prototype>
+                        <trigger_prototype>
                             <expression>{UPS:upsmon[{#UPSNAME},ups.status].last(0)}=5</expression>
                             <name>UPS {#UPSNAME} Status - Battery is charging</name>
                             <url/>
@@ -420,7 +429,7 @@
                             <type>0</type>
                         </trigger_prototype>
                         <trigger_prototype>
-                            <expression>{UPS:upsmon[{#UPSNAME},ups.status].last(0)}=11</expression>
+                            <expression>{UPS:upsmon[{#UPSNAME},ups.status].last(0)}=12</expression>
                             <name>UPS {#UPSNAME} Status - Boosting incoming voltage</name>
                             <url/>
                             <status>0</status>
@@ -465,7 +474,7 @@
                             <type>0</type>
                         </trigger_prototype>
                         <trigger_prototype>
-                            <expression>{UPS:upsmon[{#UPSNAME},ups.status].last(0)}=2</expression>
+                            <expression>{UPS:upsmon[{#UPSNAME},ups.status].last(0)}=2 | {UPS:upsmon[{#UPSNAME},ups.status].last(0)}=14</expression>
                             <name>UPS {#UPSNAME} Status - On battery</name>
                             <url/>
                             <status>0</status>

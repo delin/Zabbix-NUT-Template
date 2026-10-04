@@ -138,6 +138,18 @@
                             </tags>
                             <trigger_prototypes>
                                 <trigger_prototype>
+                                    <uuid>615f0b3bc8264812b99f8a43203f0316</uuid>
+                                    <expression>last(/UPS/upsmon[{#UPSNAME},ups.status])=4</expression>
+                                    <name>UPS {#UPSNAME} Status - Battery needs replacement</name>
+                                    <priority>HIGH</priority>
+                                </trigger_prototype>
+                                <trigger_prototype>
+                                    <uuid>db3903ecff964b8d8aebdcf05a5eeb9a</uuid>
+                                    <expression>nodata(/UPS/upsmon[{#UPSNAME},ups.status],5m)=1</expression>
+                                    <name>UPS {#UPSNAME} Status - No data for 5 minutes</name>
+                                    <priority>HIGH</priority>
+                                </trigger_prototype>
+                                <trigger_prototype>
                                     <uuid>9f4abaee0479435bbb798b0ee9c90913</uuid>
                                     <expression>last(/UPS/upsmon[{#UPSNAME},ups.status])=5</expression>
                                     <name>UPS {#UPSNAME} Status - Battery is charging</name>
@@ -146,7 +158,7 @@
                                 </trigger_prototype>
                                 <trigger_prototype>
                                     <uuid>c7aae07f67cc4bebb2856096814fc3ff</uuid>
-                                    <expression>last(/UPS/upsmon[{#UPSNAME},ups.status])=11</expression>
+                                    <expression>last(/UPS/upsmon[{#UPSNAME},ups.status])=12</expression>
                                     <name>UPS {#UPSNAME} Status - Boosting incoming voltage</name>
                                     <priority>HIGH</priority>
                                     <description>UPS is boosting incoming voltage</description>
@@ -181,7 +193,7 @@
                                 </trigger_prototype>
                                 <trigger_prototype>
                                     <uuid>5e5c975d420e46b697d763dc2555ece5</uuid>
-                                    <expression>last(/UPS/upsmon[{#UPSNAME},ups.status])=2</expression>
+                                    <expression>last(/UPS/upsmon[{#UPSNAME},ups.status])=2 or last(/UPS/upsmon[{#UPSNAME},ups.status])=14</expression>
                                     <name>UPS {#UPSNAME} Status - On battery</name>
                                     <priority>HIGH</priority>
                                     <description>On battery (mains is not present)</description>
@@ -374,6 +386,10 @@
                         <mapping>
                             <value>13</value>
                             <newvalue>On line (mains is present) and Battery is charging</newvalue>
+                        </mapping>
+                        <mapping>
+                            <value>14</value>
+                            <newvalue>On battery (mains is not present) and battery is discharging</newvalue>
                         </mapping>
                     </mappings>
                 </valuemap>
